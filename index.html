@@ -12,8 +12,8 @@
         <span>Manicura Profesional - Uñas que duran,' estilo que brilla</span>
         <a href="https://wa.me/5491123456789?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20manicuras.">Consulta wpp</a>
     </section>
+    <p class="title-content">Nuestro trabajo</p>
     <section id="content">
-        <p class="title-content">Nuestro trabajo</p>
         <aside>
             <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
             <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
@@ -25,14 +25,16 @@
     </section>
     <section class="info-service">
         <section class="section-contact">
-            <p id="contact">Contacto</p>
-            
-                <input type="text" placeholder="Nombre">
-                <input type="text" placeholder="Telefono/Whatsapp">
-                <input type="text" placeholder="Fecha">
-                <input type="text" placeholder="Servicio">
-            
-            <button>Agendar</button>
+            <form action="" id="appointment-form">
+                <p>Contacto</p> 
+
+                <input type="text" placeholder="Nombre" id="client-name" name="client-name" required>
+                <input type="tel" placeholder="Telefono/Whatsapp" id="client-phone" name="client-phone">
+                <input type="date" placeholder="Fecha" id="appointment-date" name="appointment-date" required>
+                <input type="time" placeholder="Hora" id="appointment-time" name="appointment-time" required>
+                <input type="text" placeholder="Servicio" id="service-type" name="service-type">
+                <button type="submit">Agendar</button>
+            </form>
         </section>
         <section class="section-contact">
             
@@ -44,6 +46,6 @@
     <footer>
         <p>© 2024 Manicura Estetica. Todos los derechos reservados.</p>
     </footer>
-    
+    <script src="./script.js"></script>
 </body>
 </html>
