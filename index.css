@@ -20,25 +20,38 @@ h1{
     text-shadow: 0 0 8px black;
 }
 .nav-bar{
-    border: solid black 0.5px;
+    /* border: solid black 0.5px;
     background-image:url("./img/img-design.png");
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     display: none;
     justify-content: space-between; /* Mueve el logo a un lado y los links al otro */
-    align-items: center; /* Centra verticalmente */
-    height: 5rem; /* Asegúrate de que tenga un buen alto */
+    /*align-items: center; 
+    height: 5rem; 
     padding: 0 2rem;
     
-    transition: background-position 1s ease-out
-    /*
+    transition: background-position 1s ease-out  
     background-size: cover;          
     background-position: right center;
     
   
     background-attachment: fixed;
     */
+    border: solid black 0.5px;
+    background-image: url("./img/img-design.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+    padding: 0 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 .nav-bar aside {
   display: flex;
@@ -107,14 +120,15 @@ h1{
     /*  
     border: solid 0.5px black;
     */
-    background-color: #ffc0cbc9;
-  margin: 0px 0 2rem 0px;
-  padding: 0.5rem 0 2rem 1rem;
-  border: solid black 0.5px;
-  box-shadow: 0px 20px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  overflow-y: auto;
+    max-width: 1200px; /* Limita el ancho máximo para que no se extienda demasiado en monitores ultra-anchos */
+    margin: 50px auto; /* Centra el bloque horizontalmente */
+    padding: 2rem;
+    background-color: #ffc0cbc9;  
+    border: solid black 0.5px;
+    box-shadow: 0px 20px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: auto;
 }
 #content:hover{
     background-color: rgba(255, 192, 203, 0.908);
@@ -176,4 +190,97 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+/************** de aqui para abjo css responsive********/
+
+/* =================================================== */
+/* === AJUSTES PARA TABLETS Y MÓVILES (<= 768px) === */
+/* =================================================== */
+@media (max-width: 768px) {
+
+    /* --- General --- */
+    h1 {
+        font-size: 35px; /* Títulos más pequeños para no desbordar */
+    }
+    .title-content {
+        font-size: 20px;
+    }
+    
+    /* --- 1. Navegación (.nav-bar) --- */
+    /* Hacemos visible el nav que estaba oculto y lo reorganizamos */
+    .nav-bar {
+        /* Eliminamos la propiedad que oculta el nav, ya que estaba display: none; */
+        display: flex !important; /* !important solo si el display: none; lo está bloqueando */
+        flex-direction: column; /* Coloca los elementos uno encima del otro */
+        height: auto;
+        padding: 1rem;
+    }
+    .nav-bar h2 { /* Título/Logo */
+        margin-bottom: 0.5rem;
+    }
+    .nav-links {
+        justify-content: center; /* Centra los links en móviles */
+    }
+    .nav-list {
+        flex-wrap: wrap; /* Permite que los links se envuelvan si son demasiados */
+        justify-content: center;
+    }
+    .text-nav {
+        font-size: 16px; /* Letras más pequeñas */
+        padding: 5px;
+    }
+    
+    /* --- 2. Banner (#title) --- */
+    #title {
+        height: 30vh; /* Haz el banner un poco menos alto */
+        padding: 30px 20px; /* Reduce el padding */
+        text-align: center; /* Centra el texto del banner */
+        align-items: center; /* Centra el contenido (texto/botón) */
+    }
+
+    /* --- 3. Galería (#content) --- */
+    #content {
+        /* Permite que la galería ocupe todo el ancho */
+        padding: 1rem 0;
+        box-shadow: none; /* Sombras menos intrusivas */
+    }
+    #content aside {
+        /* Desactiva el flexbox horizontal para que las imágenes se apilen */
+        flex-direction: column; 
+        max-width: 90%; /* Ocupa casi todo el ancho disponible */
+        gap: 1.5rem;
+        margin: auto; /* Centra el contenedor de imágenes */
+        padding: 0;
+    }
+    #content img {
+        /* Haz que las imágenes de la galería sean responsivas */
+        width: 100%; /* Ocupa todo el ancho disponible */
+        height: auto; /* Mantiene la proporción */
+        max-width: 350px; /* Evita que crezcan demasiado en tablets */
+        margin: auto; /* Centra las imágenes */
+    }
+
+    /* --- 4. Formulario y Mapa (.info-service) --- */
+    .info-service {
+        flex-direction: column; /* Coloca el formulario y el mapa uno debajo del otro */
+        align-items: center; /* Centra los bloques */
+        gap: 20px; /* Espacio entre el formulario y el mapa */
+    }
+    .section-contact {
+        width: 90%; /* Ambos bloques (formulario y mapa) ocupan casi todo el ancho */
+        margin: 0; /* Elimina márgenes extraños */
+        box-shadow: 4px 4px 10px; /* Sombra un poco más pequeña */
+    }
+    .section-contact img {
+        height: auto; /* Asegura que el mapa se vea bien */
+    }
+    
+    /* --- 5. Footer --- */
+    footer p {
+        font-size: 14px;
+        padding: 1rem;
+    }
 }

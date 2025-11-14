@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manicura Estetica</title>
-    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./index2.css">
 </head>
 <body>
     <section class="nav-bar">
-        <h2>nueva seccion</h2>
         <aside class="nav-links">
             <ul class="nav-list">
                 <li>
@@ -32,13 +31,22 @@
     </section>
     <p class="title-content">Nuestro trabajo</p>
     <section id="content">
-        <aside>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
-            <img src="./img/bunner-fondo.png" alt="una imagen de algo"/>
+        <aside class="carousel">
+            <img id="carousel-image" src="./img/img-design.png" alt="una imagen de algo"/>
+            <img id="carousel-image" src="./img/bunner-fondo.png" alt="una imagen de algo"/>
+            <img id="carousel-image" src="./img/img-design.png" alt="una imagen de algo"/>
+            <img id="carousel-image" src="./img/bunner-fondo.png" alt="una imagen de algo"/>
+            <img id="carousel-image" src="./img/img-design.png" alt="una imagen de algo"/>
+            <img id="carousel-image" src="./img/bunner-fondo.png" alt="una imagen de algo"/>
+            <div class="carousel-indicators">
+                <span class="indicator active" data-index="0"></span>
+                <span class="indicator" data-index="1"></span>
+                <span class="indicator" data-index="2"></span>
+                <span class="indicator" data-index="3"></span>
+                <span class="indicator" data-index="4"></span>
+                <span class="indicator" data-index="5"></span>
+            </div>
+
         </aside>
     </section>
     <section class="info-service">
@@ -54,12 +62,10 @@
                 <button type="submit">Agendar</button>
             </form>
         </section>
-        <section class="section-contact">
-            
-            <p>Ubicacion del local</p>
-            <img src="./img/react-codelab-thumbnail.png" alt="imagen de mapa">    
-            
-        </section>
+    </section>
+    <section class="section-contact">
+        <p>Ubicacion del local</p>
+        <img src="./img/react-codelab-thumbnail.png" alt="imagen de mapa">
     </section>
     <footer>
         <p>© 2024 Manicura Estetica. Todos los derechos reservados.</p>

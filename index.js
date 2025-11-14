@@ -63,4 +63,33 @@ async function handleFormSubmit(event) {
         alert('Error de conexión o de red. Inténtalo de nuevo.');
         console.error('Error de fetch:', error);
     }
+
+    //FUNCIONES DEL CARROUSEL
+    const images = [
+        './img/img-design.png',
+        './img/bunner-fondo.png',
+        './img/img-design.png',
+        './img/bunner-fondo.png',
+        './img/img-design.png',
+        './img/bunner-fondo.png'
+        ];
+
+    const carouselImage = document.getElementById('carousel-image');
+  const indicators = document.querySelectorAll('.indicator');
+
+  if (!carouselImage || indicators.length === 0) {
+    console.error('No se encontró el carrusel o los indicadores.');
+    return;
+  }
+
+  indicators.forEach(indicator => {
+    indicator.addEventListener('click', function () {
+      const index = parseInt(this.dataset.index);
+      carouselImage.src = images[index];
+
+      indicators.forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+    });
+  
+    });
 }
