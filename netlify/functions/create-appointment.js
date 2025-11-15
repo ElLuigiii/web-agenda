@@ -1,99 +1,151 @@
 const { google } = require('googleapis');
 
-// 1. Cargar las Variables de Entorno de Netlify
-// Netlify las hace accesibles a través de process.env
 const CLIENT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-// Importante: Reemplazar los caracteres \n por saltos de línea reales para la clave privada
-const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'); 
-const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID; 
-// Ajusta tu zona horaria para asegurarte de que la hora se guarde correctamente
-const TIME_ZONE = 'America/Montevideo'; 
+const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID;
+const TIME_ZONE = 'America/Montevideo';
 
 exports.handler = async (event, context) => {
-    
-    // 2. Control de Método HTTP
-    if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: 'Método no permitido. Solo se acepta POST.' };
+  if (event.httpMethod === 'GET') {
+    const date = event.queryStringParameters.date;
+    if (!date) {
+      return { statusCode: 400, body: 'Falta la fecha en la consulta.' };
     }
 
-    try {
-        // 3. Parsear los datos enviados desde el frontend (script.js)
-        const data = JSON.parse(event.body);
-        const { 
-            clientName, 
-            clientPhone, 
-            serviceType, 
-            appointmentDateTime 
-        } = data;
-        
-        // 4. Autenticación con Google API usando la Cuenta de Servicio
-        const auth = new google.auth.JWT({
-            email: CLIENT_EMAIL,
-            key: PRIVATE_KEY,
-            scopes: ['https://www.googleapis.com/auth/calendar'], // Permiso para escribir en el calendario
-        });
+    const auth = new google.auth.JWT({
+      email: CLIENT_EMAIL,
+      key: PRIVATE_KEY,
+      scopes: ['https://www.googleapis.com/auth/calendar'],
+    });
 
-        const calendar = google.calendar({ version: 'v3', auth });
-        
-        // 5. Crear el Objeto Evento de Google Calendar
-        const startTime = new Date(appointmentDateTime);
-        
-        // Asume una duración predeterminada de 60 minutos (1 hora)
-        // Puedes cambiar esto si los servicios tienen diferente duración
-        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); 
+    const calendar = google.calendar({ version: 'v3', auth });
 
-        const eventDetails = {
-            // Título del evento
-            summary: `${serviceType || 'Cita de Manicura'} - ${clientName}`, 
-            
-            // Descripción detallada
-            description: `
-                Cliente: ${clientName}
-                Teléfono: ${clientPhone || 'No proporcionado'}
-                Servicio: ${serviceType || 'No especificado'}
-                Reserva generada automáticamente desde la web.
-            `,
-            
-            start: {
-                dateTime: startTime.toISOString(),
-                timeZone: TIME_ZONE,
-            },
-            end: {
-                dateTime: endTime.toISOString(),
-                timeZone: TIME_ZONE,
-            },
-            // ColorId (opcional): Puedes asignarle un color para que se distinga fácilmente en tu calendario
-            colorId: 10, // Por ejemplo, 10 es verde. (Puedes buscar la lista de colores de GCal API)
-        };
+    const startOfDay = new Date(`${date}T11:00:00`);
+    const endOfDay = new Date(`${date}T18:00:00`);
 
-        // 6. Insertar el evento en tu calendario
-        const response = await calendar.events.insert({
-            calendarId: CALENDAR_ID,
-            resource: eventDetails,
-        });
+    const events = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      timeMin: startOfDay.toISOString(),
+      timeMax: endOfDay.toISOString(),
+      singleEvents: true,
+      orderBy: 'startTime',
+      timeZone: TIME_ZONE,
+    });
 
-        console.log(`Evento creado. Link: ${response.data.htmlLink}`);
+    const occupiedHours = events.data.items.map(event => {
+      const start = new Date(event.start.dateTime);
+      return start.getHours();
+    });
 
-        // 7. Devolver una respuesta exitosa al frontend
-        return {
-            statusCode: 200,
-            body: JSON.stringify({ 
-                message: 'Cita agendada con éxito', 
-                eventLink: response.data.htmlLink 
-            }),
-        };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ occupiedHours }),
+    };
+  }
 
-    } catch (error) {
-        // 8. Manejar y reportar errores
-        console.error('Error al agendar la cita:', error.message);
-        
-        // Devolver un error al frontend para que el usuario sepa que algo falló
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ 
-                message: 'Error al agendar la cita. Por favor, revisa la consola para más detalles.', 
-                details: error.message 
-            }),
-        };
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Método no permitido. Solo se acepta POST.' };
+  }
+
+  try {
+    const data = JSON.parse(event.body);
+    const { clientName, clientPhone, serviceType, appointmentDateTime } = data;
+
+    const startTime = new Date(appointmentDateTime);
+    const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+
+    const now = new Date();
+    const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const appointmentDate = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate());
+
+    if (appointmentDate < nowDate) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'No se pueden agendar citas en fechas pasadas.' }),
+      };
     }
+
+    if (
+      appointmentDate.getTime() === nowDate.getTime() &&
+      startTime.getTime() < now.getTime()
+    ) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'No se pueden agendar citas en una hora que ya pasó.' }),
+      };
+    }
+
+    const hour = startTime.getHours();
+    if (hour < 11 || hour >= 18) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Solo se pueden agendar citas entre las 11:00 y las 18:00 horas.' }),
+      };
+    }
+
+    const auth = new google.auth.JWT({
+      email: CLIENT_EMAIL,
+      key: PRIVATE_KEY,
+      scopes: ['https://www.googleapis.com/auth/calendar'],
+    });
+
+    const calendar = google.calendar({ version: 'v3', auth });
+
+    const existingEvents = await calendar.events.list({
+      calendarId: CALENDAR_ID,
+      timeMin: startTime.toISOString(),
+      timeMax: endTime.toISOString(),
+      timeZone: TIME_ZONE,
+      singleEvents: true,
+      orderBy: 'startTime',
+    });
+
+    if (existingEvents.data.items.length > 0) {
+      return {
+        statusCode: 409,
+        body: JSON.stringify({ message: 'Ya hay una cita agendada en ese horario. Elige otro.' }),
+      };
+    }
+
+    const eventDetails = {
+      summary: `${serviceType || 'Cita de Manicura'} - ${clientName}`,
+      description: `
+        Cliente: ${clientName}
+        Teléfono: ${clientPhone || 'No proporcionado'}
+        Servicio: ${serviceType || 'No especificado'}
+        Reserva generada automáticamente desde la web.
+      `,
+      start: {
+        dateTime: startTime.toISOString(),
+        timeZone: TIME_ZONE,
+      },
+      end: {
+        dateTime: endTime.toISOString(),
+        timeZone: TIME_ZONE,
+      },
+      colorId: 10,
+    };
+
+    const response = await calendar.events.insert({
+      calendarId: CALENDAR_ID,
+      resource: eventDetails,
+    });
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Cita agendada con éxito',
+        eventLink: response.data.htmlLink,
+      }),
+    };
+  } catch (error) {
+    console.error('Error al agendar la cita:', error.message);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Error al agendar la cita. Por favor, revisa la consola para más detalles.',
+        details: error.message,
+      }),
+    };
+  }
 };
