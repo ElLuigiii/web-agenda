@@ -1,0 +1,389 @@
+/* =================================================== */
+/* === AJUSTES GLOBALES Y RESET === */
+/* =================================================== */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* Asegura que padding y border no aumenten el ancho */
+}
+
+/* 📥 NOTA: Asegúrate de importar estas fuentes de Google Fonts en tu HTML <head> */
+/* <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> */
+
+body {
+    /* Fondo con Parallax (como lo tenías) */
+    background-image: url("./img/img-design.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif; /* Fuente base */
+}
+
+/* === TIPOGRAFÍA Y ESTILOS DE TÍTULOS === */
+h1, h2, .title-content {
+    font-family: 'Playfair Display', serif; /* Fuente de encabezados */
+}
+
+h1 {
+    font-size: 50px;
+    color: pink;
+    /* Sombra suave y legible */
+    text-shadow: 0 0 8px black; 
+}
+
+p {
+    font-size: 25px;
+    /* El border-color: yellow; parece un marcador, puedes eliminarlo */
+    /* border-color: yellow; */ 
+}
+
+.title-content {
+    margin: 10px;
+}
+
+/* =================================================== */
+/* === 1. BARRA DE NAVEGACIÓN (.nav-bar) === */
+/* =================================================== */
+.nav-bar {
+    border: solid black 0.5px;
+    background-image: url("./img/img-design.png"); /* Fondo del nav */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax en el nav */
+
+    /* Estilos Flexbox para PC (Logo izquierda, Links derecha) */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+    padding: 0 2rem;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    
+    /* El transition para el efecto hover/movimiento es mejor en el :hover */
+    /* transition: background-position 1s ease-out; */
+}
+
+/* Si tienes un h2 en el nav, dale un estilo de logo */
+.nav-bar h2 {
+    color: white;
+    font-size: 1.8rem;
+    text-shadow: 1px 1px 3px black;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    height: 20px; /* Puedes subir esto o eliminarlo si el padre .nav-bar ya tiene altura */
+}
+
+.nav-list {
+    display: flex;
+    list-style: none; /* Elimina los puntos de la lista */
+    gap: 15px; /* Espacio entre los links */
+}
+
+.text-nav {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 20px;
+    transition: color 0.3s ease-in-out; /* Suaviza el hover */
+}
+
+.text-nav:hover {
+    color: #ffc0cb; /* Cambia a rosa suave al pasar el ratón */
+}
+
+/* =================================================== */
+/* === 2. BANNER PRINCIPAL (#title) === */
+/* =================================================== */
+#title {
+    border-bottom: solid rgba(128, 128, 128, 0.705) 0.5px;
+    height: 40vh;
+    padding: 50px 0px 0px 50px;
+    
+    background-image: url(./img/bunner-fondo.png);
+    background-size: cover;
+    background-position: right center;
+    
+    /* Parallax de banner (si quieres que se mueva con scroll) */
+    /* background-attachment: fixed; */
+    
+    /* Transición para el efecto de movimiento al pasar el mouse */
+    transition: background-position 0.5s ease-out;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Efecto de movimiento sutil al pasar el mouse */
+#title:hover {
+    background-position: calc(right - 15px) center; /* Desplaza el fondo 15px a la izquierda */
+}
+
+/* Botón de WhatsApp */
+#title a {
+    color: black;
+    background-color: pink;
+    height: 2rem;
+    width: 10rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border: solid black 0.5px;
+    transition: background-color 0.3s;
+}
+
+#title a:hover {
+    background-color: #f7a3b3; /* Rosa más oscuro al hacer hover */
+}
+
+/* =================================================== */
+/* === 3. GALERÍA DE TRABAJOS (#content) === */
+/* =================================================== */
+#content {
+    background-color: #ffc0cbc9;
+    margin: 50px auto 2rem auto; /* Centra el bloque y añade margen arriba/abajo */
+    padding: 2rem 0; /* Espacio uniforme */
+    border: solid black 0.5px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2); /* Sombra más limpia */
+    max-width: 90%; /* Limita el ancho en PC para que no sea muy grande */
+    overflow-x: auto; /* Permite scroll horizontal si las imágenes no caben */
+}
+
+#content:hover {
+    background-color: rgba(255, 192, 203, 0.908);
+}
+
+#content aside {
+    display: flex;
+    padding: 1rem 2rem;
+    gap: 3rem;
+    /* Eliminar overflow-y: auto; y max-height para evitar scroll interno */
+}
+
+#content img {
+    width: 20rem;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+    padding: 4px;
+    transition: transform 0.3s ease-in-out;
+}
+
+#content img:hover {
+    transform: scale(1.05); /* Se agranda ligeramente al hacer hover */
+}
+/**** ESTILOS DE LOS BOTONES DEL CARROUSEL *****/
+.carousel {
+  text-align: center;
+  position: relative;
+}
+
+#carousel-image {
+  width: 80%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 10px;
+}
+
+.carousel-indicators {
+  margin-top: 10px;
+}
+
+.indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.indicator.active {
+  background-color: #ff69b4; /* rosa brillante */
+}
+/* =================================================== */
+/* === 4. SERVICIOS, FORMULARIO Y MAPA (.info-service) === */
+/* *** AHORA APILADOS EN TODAS LAS PANTALLAS (PC y Móvil) *** */
+/* =================================================== */
+.info-service {
+    /* 🌟 PROPIEDAD CLAVE: Apilar elementos en columna para PC 🌟 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centra los bloques apilados */
+    gap: 30px; /* Espacio entre Formulario y Mapa */
+    padding: 30px 0;
+}
+
+.section-contact {
+    /* Ancho moderado para PC, centrado */
+    display: flex;
+    flex-direction: column;
+    width: 60%; 
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 15px;
+    
+    /* Estilos de caja */
+    background-color: #ffc0cbe0;
+    border: solid 0.5px;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 6px 6px 17px rgba(0, 0, 0, 0.3);
+}
+
+.section-contact input, .section-contact button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.section-contact input:focus {
+    border-color: pink; /* Resalta el campo activo */
+    outline: none;
+}
+
+.section-contact button {
+    background-color: pink;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.section-contact button:hover {
+    background-color: #f7a3b3;
+}
+
+.section-contact img {
+    width: 100%; /* El mapa ocupa todo el ancho de su contenedor */
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    height: auto;
+}
+
+/* =================================================== */
+/* === 5. FOOTER === */
+/* =================================================== */
+footer {
+    background-color: pink;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+footer p {
+    font-size: 16px;
+    color: black;
+    margin: 0;
+}
+
+
+/* =================================================== */
+/* === MEDIA QUERIES PARA MÓVILES (<= 768px) === */
+/* =================================================== */
+@media (max-width: 768px) {
+
+    /* --- General --- */
+    h1 {
+        font-size: 30px;
+        text-align: center;
+    }
+
+    /* --- 1. Navegación (.nav-bar) --- */
+    .nav-bar {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem 0;
+        gap: 10px;
+    }
+    .nav-list {
+        flex-wrap: wrap; 
+        justify-content: center;
+        padding: 0;
+    }
+    .text-nav {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+
+    /* --- 2. Banner (#title) --- */
+    #title {
+        height: 35vh;
+        padding: 30px 20px;
+        align-items: center;
+        text-align: center;
+    }
+    #title h1, #title span, #title a {
+        margin: 0 auto; /* Centra el contenido */
+    }
+
+    /* --- 3. Galería (#content) --- */
+    #content {
+        max-width: 95%; /* Ocupa más espacio en el móvil */
+        margin: 30px auto;
+        padding: 1rem;
+    }
+    #content aside {
+        padding: 0;
+        gap: 20px;
+    }
+    #content img {
+    height: auto;   
+    max-width: none;
+    }
+
+    /* --- 4. Formulario y Mapa (.info-service) --- */
+    /* La dirección de columna ya está en el CSS base, solo ajustamos el ancho */
+    .section-contact {
+        width: 95%; /* Ocupa casi todo el ancho de la pantalla */
+        padding: 1.5rem;
+    }
+}
+#time-options {
+  margin-top: 10px;
+}
+
+#time-options button {
+  margin: 5px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.available-time {
+  background-color: pink;
+  border: 1px solid black;
+}
+
+.disabled-time {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+#time-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
