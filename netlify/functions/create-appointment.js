@@ -54,7 +54,8 @@ exports.handler = async (event, context) => {
     const startTime = new Date(appointmentDateTime);
     const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
 
-    const now = new Date();
+    // ✅ Ajustar la hora actual a la zona de Montevideo
+    const now = new Date(new Date().toLocaleString('en-US', { timeZone: TIME_ZONE }));
     const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const appointmentDate = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate());
 
