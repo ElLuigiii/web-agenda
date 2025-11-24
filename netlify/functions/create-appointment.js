@@ -125,6 +125,13 @@ exports.handler = async (event, context) => {
         timeZone: TIME_ZONE,
       },
       colorId: 10,
+      reminders: {
+        useDefault: false,
+        overrides: [
+          { method: 'popup', minutes: 1 },   // Notificación push inmediata
+          { method: 'email', minutes: 0 }    // Correo instantáneo
+        ]
+      }
     };
 
     const response = await calendar.events.insert({
